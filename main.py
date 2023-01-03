@@ -1,4 +1,5 @@
 # skeucore.com 2023
+import pathlib
 from tkinter import Button, filedialog, Frame, Label, Menu, NW, PhotoImage, StringVar, TclError, Tk
 import datetime
 import os
@@ -134,17 +135,20 @@ def clear():
     root.update()
 
 
-def get_image(path):
+def get_image(basename):
     """
     Args:
-        path (str): Path to image file to open
+        basename (str): Path to image file to open
 
     Returns:
         (PhotoImage): Tk image object
     """
+    # Use absolute path (computed relative to where this file lives)
+    here = pathlib.Path(__file__)
+    path = here.parent / basename
     try:
         # Try to load the image simply with Tk (works on Windows, and more recent Tk versions, 8.6+)
-        return PhotoImage(file="one.png")
+        return PhotoImage(file=path)
 
     except TclError:
         # For older version (Tk 8.5, auto convert image using pillow)
