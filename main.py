@@ -1,6 +1,5 @@
 # skeucore.com 2023
-from tkinter import *
-from tkinter import filedialog
+from tkinter import Button, filedialog, Frame, Label, Menu, NW, PhotoImage, StringVar, TclError, Tk
 import datetime
 import os
 import webbrowser
@@ -38,7 +37,7 @@ def piPress():
         display.config(font="Helvetica 20 bold",pady=16)
         display.update()
         root.update()
-    
+
     equation_label.set(equation_text)
     log_list.append(str("PI"))
 
@@ -79,7 +78,7 @@ def saveLog():
 
 
 def button_press(num):
-    
+
     global equation_text
     leng = len(equation_text)
     if leng > 9:
@@ -99,13 +98,13 @@ def equals():
         equation_label.set(calculation)
         equation_text = calculation
         log_list.append("Equals: "+str(calculation))
-        
-    
+
+
     except ZeroDivisionError:
         log_list.append("Zero Division Error")
         equation_label.set("Error")
         equation_text = "Error"
-    
+
 
     leng = len(calculation)
     if leng > 10:
@@ -122,7 +121,7 @@ def copyRes(): #copy result
     pyperclip.copy(calculation)
 
 
-    
+
 
 def clear():
     global equation_label
@@ -133,10 +132,24 @@ def clear():
     display.config(font="Helvetica 40 bold",pady=1)
     display.update()
     root.update()
-    
 
 
-    
+def get_image(path):
+    """
+    Args:
+        path (str): Path to image file to open
+
+    Returns:
+        (PhotoImage): Tk image object
+    """
+    try:
+        # Try to load the image simply with Tk (works on Windows, and more recent Tk versions, 8.6+)
+        return PhotoImage(file="one.png")
+
+    except TclError:
+        # For older version (Tk 8.5, auto convert image using pillow)
+        from PIL import ImageTk, Image
+        return ImageTk.PhotoImage(Image.open(path))
 
 
 root = Tk()
@@ -144,7 +157,7 @@ root.geometry("304x450")
 root.config(bg="#262626")
 root.resizable(False, False)
 root.title("Calculator")
-logo = PhotoImage(file="calclogo.png")
+logo = get_image("calclogo.png")
 root.iconphoto(True,logo)
 
 
@@ -176,30 +189,30 @@ helpMenu.add_command(label="About",command=aboutPopup)
 
 #Images
 
-oneimg = PhotoImage(file="one.png")
-twoimg = PhotoImage(file="two.png")
-threeimg = PhotoImage(file="three.png")
-fourimg = PhotoImage(file="four.png")
-fiveimg = PhotoImage(file="five.png")
-siximg = PhotoImage(file="six.png")
-sevenimg = PhotoImage(file="seven.png")
-eightimg = PhotoImage(file="eight.png")
-nineimg = PhotoImage(file="nine.png")
-zeroimg = PhotoImage(file="zero.png")
-plusimg = PhotoImage(file="plus.png")
-minusimg = PhotoImage(file="minus.png")
-timesimg = PhotoImage(file="times.png")
-divideimg = PhotoImage(file="divide.png")
-commaimg = PhotoImage(file="comma.png")
-equalsimg = PhotoImage(file="equals.png")
-clearimg = PhotoImage(file="clear.png")
-piimg = PhotoImage(file="pi.png")
-openbr = PhotoImage(file="openbracket.png")
-closebr = PhotoImage(file="closebracket.png")
-percentimg = PhotoImage(file="percent.png")
-equals_ext = PhotoImage(file="equals_extended.png")
-equals_new_basic = PhotoImage(file="enter_new_basic.png")
-backspace = PhotoImage(file="backspace.png")
+oneimg = get_image("one.png")
+twoimg = get_image("two.png")
+threeimg = get_image("three.png")
+fourimg = get_image("four.png")
+fiveimg = get_image("five.png")
+siximg = get_image("six.png")
+sevenimg = get_image("seven.png")
+eightimg = get_image("eight.png")
+nineimg = get_image("nine.png")
+zeroimg = get_image("zero.png")
+plusimg = get_image("plus.png")
+minusimg = get_image("minus.png")
+timesimg = get_image("times.png")
+divideimg = get_image("divide.png")
+commaimg = get_image("comma.png")
+equalsimg = get_image("equals.png")
+clearimg = get_image("clear.png")
+piimg = get_image("pi.png")
+openbr = get_image("openbracket.png")
+closebr = get_image("closebracket.png")
+percentimg = get_image("percent.png")
+equals_ext = get_image("equals_extended.png")
+equals_new_basic = get_image("enter_new_basic.png")
+backspace = get_image("backspace.png")
 
 equation_text = ""
 
