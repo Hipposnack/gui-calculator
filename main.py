@@ -8,7 +8,7 @@ from tkinter import messagebox
 import pyperclip
 import math
 
-
+digits = ["1","2","3","4","5","6","7","8","9","0","(",")","/","+","-","*","%","."]
 log_list = []
 
 def delete():
@@ -16,7 +16,7 @@ def delete():
     global equation_label
     leng = len(equation_text)
     equation_text = equation_text[:-1]
-    if leng < 15:
+    if leng < 13:
         display.config(font="Helvetica 40 bold",pady=1)
         display.update()
         root.update()
@@ -59,7 +59,7 @@ def openPDF():
 
 
 def aboutPopup():
-    messagebox.showinfo(title="About", message="Calculator v1.0.1")
+    messagebox.showinfo(title="About", message="Calculator v1.0.3 for OSX")
 
 def openWeb():
     webbrowser.open('http://skeucore.com')
@@ -71,11 +71,15 @@ def saveLog():
     dir = filedialog.askdirectory()
     current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     time = str(current_time)
-    filepath = os.path.join(dir +"/log_save_"+time+".txt")
-    list_to_str = str(log_list)
-    with open(filepath, "x") as log:
-        log.write(list_to_str)
-        log.close()
+    try:
+        filepath = os.path.join(dir +"/log_save_"+time+".txt")
+        list_to_str = str(log_list)
+        with open(filepath, "x") as log:
+            log.write(list_to_str)
+            log.close()
+        messagebox.showinfo(message="Log saved successfully at "+ dir,title="Export Log")
+    except Exception as err:
+        messagebox.showerror(message="Error when exporting Log:\n"+str(err),title="Error")
 
 
 
@@ -155,6 +159,14 @@ root.resizable(False, False)
 root.title("Calculator")
 logo = PhotoImage(file="calclogo.png")
 root.iconphoto(True,logo)
+
+root.bind("<Return>", lambda event: equals())
+root.bind("<BackSpace>", lambda event: delete())
+root.bind("<Delete>", lambda event: clear())
+root.bind("<p>", lambda event: piPress())
+root.bind("<c>", lambda event: clear())
+for vals in digits:
+    root.bind(str(vals), lambda event,digit=vals: button_press(digit))
 
 
 menubar = Menu(root)
