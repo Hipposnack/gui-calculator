@@ -7,7 +7,10 @@ import webbrowser
 from tkinter import messagebox
 import pyperclip
 import math
+import keyboard
 
+
+digits = ["1","2","3","4","5","6","7","8","9","0","(",")","/","+","-","*","%","."]
 log_list = []
 
 def delete():
@@ -15,7 +18,7 @@ def delete():
     global equation_label
     leng = len(equation_text)
     equation_text = equation_text[:-1]
-    if leng < 15:
+    if leng < 13:
         display.config(font="Helvetica 40 bold",pady=1)
         display.update()
         root.update()
@@ -58,7 +61,7 @@ def openPDF():
 
 
 def aboutPopup():
-    messagebox.showinfo(title="About", message="Calculator v1.0.1")
+    messagebox.showinfo(title="About", message="Calculator v1.0.3")
 
 def openWeb():
     webbrowser.open('http://skeucore.com')
@@ -70,16 +73,23 @@ def saveLog():
     dir = filedialog.askdirectory()
     current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     time = str(current_time)
-    filepath = os.path.join(dir +"/log_save_"+time+".txt")
-    list_to_str = str(log_list)
-    with open(filepath, "x") as log:
-        log.write(list_to_str)
-        log.close()
+    try:
+        filepath = os.path.join(dir +"/log_save_"+time+".txt")
+        list_to_str = str(log_list)
+        with open(filepath, "x") as log:
+            log.write(list_to_str)
+            log.close()
+        messagebox.showinfo(message="Log saved successfully at "+ dir,title="Export Log")
+    except Exception as err:
+        messagebox.showerror(message="Error when exporting Log:\n"+str(err),title="Error")
+
+
+
 
 
 
 def button_press(num):
-    
+
     global equation_text
     leng = len(equation_text)
     if leng > 9:
@@ -122,6 +132,8 @@ def copyRes(): #copy result
     pyperclip.copy(calculation)
 
 
+
+
     
 
 def clear():
@@ -133,19 +145,36 @@ def clear():
     display.config(font="Helvetica 40 bold",pady=1)
     display.update()
     root.update()
+
+# def resource_path(relative):
+#     return os.path.join(
+#         os.environ.get(
+#             "_MEIPASS2",
+#             os.path.abspath(".")
+#         ),
+#         relative
+#     )
+#     return os.path.join(base_path, relative_path)
+
     
 
-
-    
-
-
+global root
 root = Tk()
 root.geometry("304x450")
 root.config(bg="#262626")
 root.resizable(False, False)
 root.title("Calculator")
-logo = PhotoImage(file="calclogo.png")
+logo = PhotoImage(file="favicon-2.png")
 root.iconphoto(True,logo)
+
+
+root.bind("<Return>", lambda event: equals())
+root.bind("<BackSpace>", lambda event: delete())
+root.bind("<Delete>", lambda event: clear())
+root.bind("<p>", lambda event: piPress())
+root.bind("<c>", lambda event: clear())
+for vals in digits:
+    root.bind(str(vals), lambda event,digit=vals: button_press(digit))
 
 
 menubar = Menu(root)
@@ -172,9 +201,32 @@ helpMenu.add_command(label="User Guide",command=openPDF)
 helpMenu.add_command(label="Website",command=openWeb)
 helpMenu.add_command(label="About",command=aboutPopup)
 
+#Image path
+# onepath = resource_path("one.png")
+# twopath = resource_path("two.png")
+# threepath = resource_path("three.png")
+# fourpath = resource_path("four.png")
+# fivepath = resource_path("five.png")
+# sixpath = resource_path("six.png")
+# sevenpath = resource_path("seven.png")
+# eightpath = resource_path("eight.png")
+# ninepath = resource_path("nine.png")
+# zeropath = resource_path("zero.png")
+# pluspath = resource_path("plus.png")
+# minuspath = resource_path("minus.png")
+# timespath = resource_path("times.png")
+# dividepath = resource_path("divide.png")
+# percentpath = resource_path("percent.png")
+# pipath = resource_path("pi.png")
+# openbrpath = resource_path("openbracket.png")
+# closebrpath = resource_path("closebracket.png")
+# equalspath= resource_path("equals.png")
+# clearpath = resource_path("clear.png")
+# backspacepath = resource_path("backspace.png")
+# commapath = resource_path("comma.png")
+# enter_new_basicpath = resource_path("enter_new_basic.png")
+# equals_extendedpath = resource_path("equals_extended.png")
 
-
-#Images
 
 oneimg = PhotoImage(file="one.png")
 twoimg = PhotoImage(file="two.png")
@@ -199,7 +251,35 @@ closebr = PhotoImage(file="closebracket.png")
 percentimg = PhotoImage(file="percent.png")
 equals_ext = PhotoImage(file="equals_extended.png")
 equals_new_basic = PhotoImage(file="enter_new_basic.png")
-backspace = PhotoImage(file="backspace.png")
+backspace = PhotoImage(file="backspace.png") 
+
+
+#Images
+
+# oneimg = PhotoImage(file=onepath)
+# twoimg = PhotoImage(file=twopath)
+# threeimg = PhotoImage(file=threepath)
+# fourimg = PhotoImage(file=fourpath)
+# fiveimg = PhotoImage(file=fivepath)
+# siximg = PhotoImage(file=sixpath)
+# sevenimg = PhotoImage(file=sevenpath)
+# eightimg = PhotoImage(file=eightpath)
+# nineimg = PhotoImage(file=ninepath)
+# zeroimg = PhotoImage(file=zeropath)
+# plusimg = PhotoImage(file=pluspath)
+# minusimg = PhotoImage(file=minuspath)
+# timesimg = PhotoImage(file=timespath)
+# divideimg = PhotoImage(file=dividepath)
+# commaimg = PhotoImage(file=commapath)
+# equalsimg = PhotoImage(file=equalspath)
+# clearimg = PhotoImage(file=clearpath)
+# piimg = PhotoImage(file=pipath)
+# openbr = PhotoImage(file=openbrpath)
+# closebr = PhotoImage(file=closebrpath)
+# percentimg = PhotoImage(file=percentpath)
+# equals_ext = PhotoImage(file=equals_extendedpath)
+# equals_new_basic = PhotoImage(file=enter_new_basicpath)
+# backspace = PhotoImage(file=backspacepath)
 
 equation_text = ""
 
@@ -212,9 +292,13 @@ display.pack()
 frame = Frame(root)
 frame.pack(anchor=NW)
 
+root.bind()
+
 
 one = Button(frame, image=oneimg, width=70, height=70,command=lambda: button_press(1))
 one.grid(column=1,row=0)
+
+
 
 two = Button(frame, image=twoimg, width=70, height=70,command=lambda: button_press(2))
 two.grid(column=2,row=0)
@@ -298,3 +382,5 @@ equalsbtn.place(y=372)
 
 
 root.mainloop()
+
+
