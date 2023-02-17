@@ -8,28 +8,17 @@ from tkinter import messagebox
 import pyperclip
 import math
 import keyboard
-
+import re
 
 digits = ["1","2","3","4","5","6","7","8","9","0","(",")","/","+","-","*","%","."]
+symbols = ["+","-","*","/","%"]
 log_list = []
 
-def delete():
-    global equation_text
-    global equation_label
-    leng = len(equation_text)
-    equation_text = equation_text[:-1]
-    if leng < 13:
-        display.config(font="Helvetica 40 bold",pady=1)
-        display.update()
-        root.update()
-    equation_label.set(equation_text)
-    log_list.append(str("Delete"))
 
-def basic():
-    root.geometry("304x450")
-    equalsbtn.config(width="223",image=equals_new_basic)
-    backspacebtn.grid(column=4,row=4)
-    root.update()
+
+
+
+
 
 
 def piPress():
@@ -37,10 +26,25 @@ def piPress():
     pivar = math.pi
     equation_text = equation_text + str(pivar)
     leng = len(equation_text)
-    if leng > 9:
-        display.config(font="Helvetica 20 bold",pady=16)
-        display.update()
-        root.update()
+    if size == "457x450":
+        if leng > 15:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 30:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
+    else:
+
+        if leng > 9:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 18:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
     
     equation_label.set(equation_text)
     log_list.append(str("PI"))
@@ -49,10 +53,60 @@ def piPress():
 
 
 def extended():
-    root.geometry("380x450")
+    global size
+    global equation_text
+    global equation_label
+    size = "457x450"
+    root.geometry(size)
     equalsbtn.config(width="298",image=equals_ext)
     backspacebtn.grid(column=5,row=4)
+
+    leng = len(equation_text)
+
+    if leng > 15:
+        display.config(font="Helvetica 20 bold", pady=16)
+        display.update()
+        root.update()
+    if leng > 30:
+        display.config(font="Helvetica 10 bold", pady=24)
+        display.update()
+        root.update()
+    if leng < 15:
+        display.config(font="Helvetica 40 bold", pady=1)
+        display.update()
+        root.update()
+
+    display.update()
     root.update()
+
+def basic():
+    global size
+    global equation_text
+    global equation_label
+    size = "304x450"
+    root.geometry(size)
+    equalsbtn.config(width="223",image=equals_new_basic)
+    backspacebtn.grid(column=4,row=4)
+    leng = len(equation_text)
+
+    if leng < 9:
+        display.config(font="Helvetica 40 bold", pady=1)
+        display.update()
+        root.update()
+    if leng > 9:
+        display.config(font="Helvetica 20 bold", pady=16)
+        display.update()
+        root.update()
+    if leng > 18:
+        display.config(font="Helvetica 10 bold", pady=24)
+        display.update()
+        root.update()
+
+    display.update()
+    root.update()
+
+
+
 
 
 def openPDF():
@@ -61,7 +115,7 @@ def openPDF():
 
 
 def aboutPopup():
-    messagebox.showinfo(title="About", message="Calculator v1.0.3")
+    messagebox.showinfo(title="About", message="Calculator v2.0.0")
 
 def openWeb():
     webbrowser.open('http://skeucore.com')
@@ -89,51 +143,70 @@ def saveLog():
 
 
 def button_press(num):
-
+    global size
     global equation_text
     leng = len(equation_text)
-    if leng > 9:
-        display.config(font="Helvetica 20 bold",pady=16)
-        display.update()
-        root.update()
+    if size == "457x450":
+        if leng > 15:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 29:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
+    else:
+
+        if leng > 9:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 18:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
     equation_text = equation_text + str(num)
     equation_label.set(equation_text)
     log_list.append(str(equation_text))
 
 
-def equals():
-    global equation_text
-    global calculation
-    try:
-        calculation = str(eval(equation_text))
-        equation_label.set(calculation)
-        equation_text = calculation
-        log_list.append("Equals: "+str(calculation))
-        
-    
-    except ZeroDivisionError:
-        log_list.append("Zero Division Error")
-        equation_label.set("Error")
-        equation_text = "Error"
-    
 
-    leng = len(calculation)
-    if leng > 10:
-        display.config(font="Helvetica 20 bold",pady=16)
-        display.update()
-        root.update()
-    else:
-        display.config(font="Helvetica 40 bold",pady=1)
-        display.update()
-        root.update()
 
 def copyRes(): #copy result
     global calculation
     pyperclip.copy(calculation)
 
+def paste():
+    global equation_text
+    global equation_label
+    paste = pyperclip.paste()
 
+    equation_text = equation_text + paste
+    leng = len(equation_text)
+    if size == "457x450":
+        if leng > 15:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 30:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
+    else:
 
+        if leng > 9:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 18:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
 
+    equation_label.set(equation_text)
+    root.update()
+    display.update()
+    log_list.append(str(paste))
     
 
 def clear():
@@ -156,11 +229,325 @@ def clear():
 #     )
 #     return os.path.join(base_path, relative_path)
 
-    
+
+def sin():
+    global equation_text
+    global equation_label
+    global size
+    try:
+        parts = re.split(r"([+-/*%])", equation_text)
+        var1 = ''.join(parts[:-1])
+        var2 = parts[-1]
+
+        eq_last_part = math.sin(math.radians(float(var2)))
+        equation_text = var1 + str(eq_last_part)
+        leng = len(str(equation_text))
+
+        if size == "457x450":
+            if leng > 15:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 30:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+        else:
+
+            if leng > 9:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 18:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+
+        log_list.append(str(eq_last_part))
+
+        equation_label.set(equation_text)
+        root.update()
+        display.update()
+
+    except Exception:
+        equation_label.set("Error")
+        root.update()
+        display.update()
+
+
+
+
+
+
+
+
+
+
+
+
+def cos():
+    global equation_text
+    global equation_label
+    global size
+    try:
+        parts = re.split(r"([+-/*%])", equation_text)
+        var1 = ''.join(parts[:-1])
+        var2 = parts[-1]
+
+        eq_last_part = math.cos(math.radians(float(var2)))
+        equation_text = var1 + str(eq_last_part)
+        leng = len(str(equation_text))
+
+        if size == "457x450":
+            if leng > 15:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 30:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+        else:
+
+            if leng > 9:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 18:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+
+        log_list.append(str(eq_last_part))
+
+
+        equation_label.set(equation_text)
+        root.update()
+        display.update()
+    except Exception:
+        equation_label.set("Error")
+        root.update()
+        display.update()
+
+def tan():
+    global equation_text
+    global equation_label
+    global size
+    try:
+        parts = re.split(r"([+-/*%])", equation_text)
+        var1 = ''.join(parts[:-1])
+        var2 = parts[-1]
+
+        eq_last_part = math.tan(math.radians(float(var2)))
+        equation_text = var1 + str(eq_last_part)
+        leng = len(str(equation_text))
+
+        if size == "457x450":
+            if leng > 15:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 30:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+        else:
+
+            if leng > 9:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 18:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+
+        log_list.append(str(eq_last_part))
+
+
+        equation_label.set(equation_text)
+        root.update()
+        display.update()
+    except Exception:
+        equation_label.set("Error")
+        root.update()
+        display.update()
+
+
+def delete():
+    global equation_text
+    global equation_label
+    global size
+    leng = len(equation_text)
+    equation_text = equation_text[:-1]
+
+
+
+    if size == "457x450":
+        if leng < 30:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng < 19:
+            display.config(font="Helvetica 40 bold", pady=1)
+            display.update()
+            root.update()
+    else:
+
+        if leng < 21:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng < 12:
+            display.config(font="Helvetica 40 bold", pady=1)
+            display.update()
+            root.update()
+
+    equation_label.set(equation_text)
+    log_list.append(str("Delete"))
+
+
+def equals():
+    global equation_text
+    global calculation
+    global size
+    try:
+        calculation = str(eval(equation_text))
+        equation_label.set(calculation)
+        equation_text = calculation
+        log_list.append("Equals: " + str(calculation))
+
+
+    except ZeroDivisionError:
+        log_list.append("Zero Division Error")
+        equation_label.set("Error")
+        equation_text = "Error"
+
+    leng = len(calculation)
+    if size == "457x450":
+        if leng > 15:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 30:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
+
+    else:
+
+        if leng > 9:
+            display.config(font="Helvetica 20 bold", pady=16)
+            display.update()
+            root.update()
+        if leng > 18:
+            display.config(font="Helvetica 10 bold", pady=24)
+            display.update()
+            root.update()
+
+
+def sqrt_func():
+    global equation_text
+    global equation_label
+    global size
+    try:
+        parts = re.split(r"([+-/*%])", equation_text)
+        var1 = ''.join(parts[:-1])
+        var2 = parts[-1]
+
+        eq_last_part = math.sqrt(float(var2))
+        equation_text = var1 + str(eq_last_part)
+        leng = len(str(equation_text))
+
+        if size == "457x450":
+            if leng > 15:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 30:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+        else:
+
+            if leng > 9:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 18:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+
+        log_list.append(str(eq_last_part))
+
+
+        equation_label.set(equation_text)
+        root.update()
+        display.update()
+    except Exception:
+        equation_label.set("Error")
+        root.update()
+        display.update()
+
+def pow_two_func():
+    global equation_text
+    global equation_label
+    global size
+    try:
+        parts = re.split(r"([+-/*%])", equation_text)
+        var1 = ''.join(parts[:-1])
+        var2 = parts[-1]
+
+        eq_last_part = math.pow(float(var2),2)
+        equation_text = var1 + str(eq_last_part)
+        leng = len(str(equation_text))
+
+        if size == "457x450":
+            if leng > 15:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 30:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+        else:
+
+            if leng > 9:
+                display.config(font="Helvetica 20 bold", pady=16)
+                display.update()
+                root.update()
+            if leng > 18:
+                display.config(font="Helvetica 10 bold", pady=24)
+                display.update()
+                root.update()
+
+        log_list.append(str(eq_last_part))
+
+
+        equation_label.set(equation_text)
+        root.update()
+        display.update()
+    except Exception:
+        equation_label.set("Error")
+        root.update()
+        display.update()
+
+
+
+
+def feedbackwin():
+    webbrowser.open('mailto:?to=' + "skeucore@gmail.com" + '&subject=' + "Feedback" + '&body=' + "", new=1)
+
+
+
+
 
 global root
 root = Tk()
-root.geometry("304x450")
+size = "304x450"
+root.geometry(size)
 root.config(bg="#262626")
 root.resizable(False, False)
 root.title("Calculator")
@@ -173,6 +560,9 @@ root.bind("<BackSpace>", lambda event: delete())
 root.bind("<Delete>", lambda event: clear())
 root.bind("<p>", lambda event: piPress())
 root.bind("<c>", lambda event: clear())
+root.bind("<KP_Decimal>", lambda event: button_press("."))
+root.bind("<,>", lambda event: button_press("."))
+root.bind("<v>", lambda event: paste())
 for vals in digits:
     root.bind(str(vals), lambda event,digit=vals: button_press(digit))
 
@@ -185,6 +575,7 @@ menubar.add_cascade(label="File",menu=fileMenu)
 fileMenu.add_command(label="Export Log",command=saveLog)
 fileMenu.add_command(label="Clear Log",command=clearLog)
 fileMenu.add_command(label="Copy Result",command=copyRes)
+fileMenu.add_command(label="Paste",command=paste)
 #fileMenu.add_command(label="Delete",command=delete) Used to be delete button for testing
 
 
@@ -199,6 +590,7 @@ helpMenu = Menu(menubar,tearoff=0)
 menubar.add_cascade(label="Help",menu=helpMenu)
 helpMenu.add_command(label="User Guide",command=openPDF)
 helpMenu.add_command(label="Website",command=openWeb)
+helpMenu.add_command(label="Feedback",command=feedbackwin)
 helpMenu.add_command(label="About",command=aboutPopup)
 
 #Image path
@@ -251,7 +643,13 @@ closebr = PhotoImage(file="closebracket.png")
 percentimg = PhotoImage(file="percent.png")
 equals_ext = PhotoImage(file="equals_extended.png")
 equals_new_basic = PhotoImage(file="enter_new_basic.png")
-backspace = PhotoImage(file="backspace.png") 
+backspace = PhotoImage(file="backspace.png")
+cosimg = PhotoImage(file="cos.png")
+tanimg = PhotoImage(file="tan.png")
+sinimg = PhotoImage(file="sin.png")
+remainderimg = PhotoImage(file="remainder.png")
+pow_of_two_img = PhotoImage(file="power_of_two.png")
+square_root_img = PhotoImage(file="square_root.png")
 
 
 #Images
@@ -285,10 +683,12 @@ equation_text = ""
 
 equation_label = StringVar()
 
-display = Label(root, width=300,font="Helvetica 40 bold",bg="#5c5c5c",fg="white", textvariable=equation_label)
+display = Label(root, width=300,font="Helvetica 40 bold",bg="#5c5c5c",fg="white", textvariable=equation_label,anchor='w')
 
 
-display.pack()
+
+
+display.pack(fill='both')
 frame = Frame(root)
 frame.pack(anchor=NW)
 
@@ -340,7 +740,7 @@ divide = Button(frame, image=divideimg, width=70, height=70,command=lambda: butt
 divide.grid(column=4,row=3)
 
 
-percent = Button(frame, image=percentimg, width=70, height=70,command=lambda: button_press("%"))
+percent = Button(frame, image=remainderimg, width=70, height=70,command=lambda: button_press("%"))
 percent.grid(column=5,row=0)
 
 openbracket = Button(frame, image=openbr, width=70, height=70,command=lambda: button_press("("))
@@ -353,6 +753,25 @@ closebracket.grid(column=5,row=2)
 
 pi = Button(frame, image=piimg, width=70, height=70,command=piPress)
 pi.grid(column=5,row=3)
+
+# -----
+
+sin = Button(frame, image=sinimg, width=70, height=70,command=sin)
+sin.grid(column=6,row=0)
+
+cos = Button(frame, image=cosimg, width=70, height=70,command=cos)
+cos.grid(column=6,row=1)
+
+tan = Button(frame, image=tanimg, width=70, height=70,command=tan)
+tan.grid(column=6,row=2)
+
+
+
+sqrt = Button(frame, image=square_root_img, width=70, height=70,command=sqrt_func)
+sqrt.grid(column=6,row=3)
+
+pow_two = Button(frame, image=pow_of_two_img, width=70, height=70,command=pow_two_func)
+pow_two.grid(column=6,row=4)
 
 
 
